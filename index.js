@@ -24,6 +24,7 @@ function kueWorker(options, cb) {
 	var concurrency      = (argv.c) ? argv.c : (options.concurrency) ? options.concurrency              : 1
 	var platform         = {}
 	var jobs             = kue.createQueue( (config.redis)           ? { redis: config.redis }          : undefined )
+	var type             = (options.type)                            ? options.type                     : 'unknown_worker_type'
 
 	op.init(logOptions, function(data) {
 		platform = data
@@ -32,7 +33,7 @@ function kueWorker(options, cb) {
 	})
 
 	function start() {
-		jobs.process('test', concurrency, function(job, done) {
+		jobs.process(type, concurrency, function(job, done) {
 			try {
 				if (argv.v || options.verbose) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
