@@ -8,6 +8,7 @@ NODE_ENV           Config JSON in environment variable
 */
 
 function kueWorker(options, cb) {
+	var fs               = require('fs')
 	var config           = require('config4u')()  // configuration
 	var kue              = require('kue')
 	var op               = require('oplog')
@@ -16,6 +17,11 @@ function kueWorker(options, cb) {
 	var logOptions       = {
 		ua:        pack.name + '/' + pack.version,
 		microtime: true
+	}
+
+	if (!options.ua && fs.existsSync('../../package.json')) {
+		var parentPack = require('../../package.json')
+		options.ua = parentPack.name + '/' + parentPack.version
 	}
 
 	options              = (options)                                 ? options                          : {}
