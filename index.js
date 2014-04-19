@@ -19,9 +19,14 @@ function kueWorker(options, cb) {
 		microtime: true
 	}
 
-	if (!options.ua && fs.existsSync('../../package.json')) {
-		var parentPack = require('../../package.json')
-		options.ua = parentPack.name + '/' + parentPack.version
+	if (!options.ua) {
+		var parentPack   = undefined
+		try {
+			parentPack   = require('../../package.json')
+		} catch(e) {}
+		if (parentPack) {
+			options.ua   = parentPack.name + '/' + parentPack.version
+		}
 	}
 
 	options              = (options)                                 ? options                          : {}
