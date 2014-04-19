@@ -46,12 +46,21 @@ function kueWorker(options, cb) {
 
 	function start() {
 		jobs.process(type, concurrency, function(job, done) {
+
+			function finish() {
+				if (argv.v || options.verbose) {
+					op.log({ op: 'done', job: job.id, title: job.data.title, run: job.duration })
+				}
+				done() // success. call with an error message to fail
+			}
+
 			try {
 				if (argv.v || options.verbose) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
 					job.log(op.useragent())
 				}
-				cb(job, done)
+				cb(job, finish)
+
 			} catch(err) {
 				if (argv.v || options.verbose) {
 					op.log({
