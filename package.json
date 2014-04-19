@@ -1,6 +1,6 @@
 {
   "name": "kue-worker",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "Kue Worker Cli Helper",
   "main": "doTest",
   "scripts": {
