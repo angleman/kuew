@@ -1,4 +1,5 @@
-/* Kue Worker Cli Helper
+/* keuw
+   Kue Worker Cli Helper
 
 -c concurrency     default 1
 -log logfile       default STDOUT

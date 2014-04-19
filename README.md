@@ -1,4 +1,4 @@
-kue-worker
+kuew
 ==========
 
 kue worker cli shell
