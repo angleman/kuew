@@ -74,10 +74,10 @@ function kueWorker(options, cb) {
 				}
 				done(err) // fail on error
 
-            function halt(err) {
-               throw err
+            function halt() {
+               process.exit(1)
             }
-            setTimeout(halt, 1, err)
+            setTimeout(halt, 1)
 			}
 		})
 	}
