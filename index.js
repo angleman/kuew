@@ -19,6 +19,7 @@ function kueWorker(options, cb) {
 		ua:        pack.name + '/' + pack.version,
 		microtime: true
 	}
+   var self             = this
 
 	if (!options.ua) {
 		var parentPack   = undefined
@@ -39,7 +40,7 @@ function kueWorker(options, cb) {
 	var type             = (options.type)                            ? options.type                     : 'unknown_worker_type'
 
 	op.init(logOptions, function(data) {
-		platform = data
+		self.platform = data
 		op.log('startup')
 		start()
 	})
@@ -59,7 +60,6 @@ function kueWorker(options, cb) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
 					job.log(op.useragent())
 				}
-            job.data._platform = platform
 				cb(job, finish)
 
 			} catch(err) {
