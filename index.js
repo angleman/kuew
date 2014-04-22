@@ -40,7 +40,7 @@ function kueWorker(options, cb) {
 	var type             = (options.type)                            ? options.type                     : 'unknown_worker_type'
 
 	op.init(logOptions, function(data) {
-		self.platform = data
+		platform = data
 		op.log('startup')
 		start()
 	})
@@ -60,7 +60,7 @@ function kueWorker(options, cb) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
 					job.log(op.useragent())
 				}
-				cb(job, finish)
+				cb(job, finish, platform)
 
 			} catch(err) {
 				if (argv.v || options.verbose) {
