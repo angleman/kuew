@@ -73,6 +73,7 @@ function kueWorker(options, cb) {
 					})
 				}
 				done(err)
+            setTimeout(process.exit, 1000, 1)
 			}
 		})
 	}
