@@ -75,9 +75,9 @@ function kueWorker(options, cb) {
 				done(err) // fail on error
 
             function halt(err) {
-               throw new Error(err)
+               throw err
             }
-            setTimeout(halt, 10, err)
+            setTimeout(halt, 1, err)
 			}
 		})
 	}
