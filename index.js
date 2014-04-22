@@ -59,6 +59,7 @@ function kueWorker(options, cb) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
 					job.log(op.useragent())
 				}
+            job.data._platform = platform
 				cb(job, finish)
 
 			} catch(err) {
@@ -73,7 +74,7 @@ function kueWorker(options, cb) {
 				}
 				done(err)
 			}
-		})	
+		})
 	}
 }
 
