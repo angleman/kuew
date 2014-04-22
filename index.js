@@ -72,12 +72,12 @@ function kueWorker(options, cb) {
 						errorStack: err.stack
 					})
 				}
-				done(err)
+				done(err) // fail on error
 
-            function halt() {
+            function halt(err) {
                throw new Error(err)
             }
-            setTimeout(halt, 1000)
+            setTimeout(halt, 10, err)
 			}
 		})
 	}
