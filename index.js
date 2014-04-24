@@ -38,6 +38,9 @@ function kueWorker(options, cb) {
 	var platform         = {}
 	var jobs             = kue.createQueue( (config.redis)           ? { redis: config.redis }          : undefined )
 	var type             = (options.type)                            ? options.type                     : 'unknown_worker_type'
+   var killJobs         = undefined
+   var killTimer        = undefined
+   var killDone         = undefined
 
 	op.init(logOptions, function(data) {
 		platform = data
@@ -48,6 +51,16 @@ function kueWorker(options, cb) {
 	function start() {
 		jobs.process(type, concurrency, function(job, done) {
 
+         function halt() {
+            process.exit(1)
+         }
+
+         function terminate() {
+            op.log({op: 'terminate'})
+            killDone()
+            setTimeout(halt, 1)
+         }
+
 			function finish() {
 				if (argv.v || options.verbose) {
 					op.log({ op: 'done', job: job.id, title: job.data.title, run: job.duration })
@@ -56,6 +69,13 @@ function kueWorker(options, cb) {
 			}
 
 			try {
+            if (killJobs) {
+               op.log({ op: 'killed', job: job.id, title: job.data.title, by: killJobs })
+               if (killTimer) clearInterval(killTimer)
+               killTimer = setInterval(terminate, (killJobs.data.wait) ? killJobs.data.wait : 60000)
+               cb(killJobs.data.title)
+            }
+
 				if (argv.v || options.verbose) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
 					job.log(op.useragent())
@@ -74,13 +94,19 @@ function kueWorker(options, cb) {
 				}
 				done(err) // fail on error
 
-            function halt() {
-               process.exit(1)
-            }
             setTimeout(halt, 1)
 			}
 		})
-	}
+
+
+
+      jobs.process('kill-' + type, function(job, done) {
+         op.log({ op: 'killing', job: job.id, title: job.data.title })
+         killDone = done
+         killJobs = job
+      })
+   }
+
 }
 
 module.exports = kueWorker
