@@ -80,7 +80,7 @@ function kueWorker(options, cb) {
 					op.log({ op: 'start', job: job.id, title: job.data.title })
 					job.log(op.useragent())
 				}
-				cb(job, finish, platform)
+				cb(job, finish, platform, kue)
 
 			} catch(err) {
 				if (argv.v || options.verbose) {
