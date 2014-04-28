@@ -38,9 +38,9 @@ function kueWorker(options, cb) {
 	var platform         = {}
 	var jobs             = kue.createQueue( (config.redis)           ? { redis: config.redis }          : undefined )
 	var type             = (options.type)                            ? options.type                     : 'unknown_worker_type'
-   var killJobs         = undefined
+   var killJobs         = argv.killall
    var killTimer        = undefined
-   var killMsg          = undefined
+   var killMsg          = 'killall'
 
 	op.init(logOptions, function(data) {
 		platform = data
