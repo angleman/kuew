@@ -41,6 +41,7 @@ function kueWorker(options, cb) {
    var killJobs         = argv.killall
    var killTimer        = undefined
    var killMsg          = 'killall'
+   var killDone         = undefined
 
 	op.init(logOptions, function(data) {
 		platform = data
@@ -57,8 +58,8 @@ function kueWorker(options, cb) {
 
          function terminate() {
             op.log({op: 'terminate'})
+            setTimeout(halt, 100)
             killDone()
-            setTimeout(halt, 1)
          }
 
 			function finish(err) {
@@ -74,7 +75,7 @@ function kueWorker(options, cb) {
                op.log({ op: 'killed', job: job.id, title: job.data.title })
                if (killTimer) clearInterval(killTimer)
                killTimer = setInterval(terminate, 60000) // one minute with no jobs killed, then done
-               cb(killMsg)
+               done(killMsg)
                return
             }
 
@@ -103,9 +104,11 @@ function kueWorker(options, cb) {
 
 
       jobs.process('kill-' + type, function(job, done) {
-         killMsg  = job.data.title
+         killMsg   = job.data.title
          op.log({ op: 'killing', job: job.id, title: killMsg })
-         killJobs = true
+         killJobs  = true
+         killDone  = done
+         killTimer = setInterval(terminate, 60000) // one minute with no jobs killed, then done
       })
    }
 
