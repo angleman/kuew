@@ -61,11 +61,12 @@ function kueWorker(options, cb) {
             setTimeout(halt, 1)
          }
 
-			function finish() {
+			function finish(err) {
 				if (argv.v || options.verbose) {
-					op.log({ op: 'done', job: job.id, title: job.data.title, run: job.duration })
+               var msg = (err) ? 'failed' : 'done'
+					op.log({ op: msg, job: job.id, title: job.data.title, run: job.duration })
 				}
-				done() // success. call with an error message to fail
+				done(err) // success. call with an error message to fail
 			}
 
 			try {
