@@ -50,6 +50,11 @@ function kueWorker(options, cb) {
 	})
 
 
+   function halt() {
+      process.exit(1)
+   }
+
+
    function terminate() {
       op.log({op: 'terminate'})
       setTimeout(halt, 100)
@@ -59,10 +64,6 @@ function kueWorker(options, cb) {
 
 	function start() {
 		jobs.process(type, concurrency, function(job, done) {
-
-         function halt() {
-            process.exit(1)
-         }
 
 			function finish(err) {
 				if (argv.v || options.verbose) {
