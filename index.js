@@ -49,17 +49,19 @@ function kueWorker(options, cb) {
 		start()
 	})
 
+
+   function terminate() {
+      op.log({op: 'terminate'})
+      setTimeout(halt, 100)
+      killDone()
+   }
+
+
 	function start() {
 		jobs.process(type, concurrency, function(job, done) {
 
          function halt() {
             process.exit(1)
-         }
-
-         function terminate() {
-            op.log({op: 'terminate'})
-            setTimeout(halt, 100)
-            killDone()
          }
 
 			function finish(err) {
